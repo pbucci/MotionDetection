@@ -72,7 +72,8 @@ void setup() {
   // loadFile will look in all the same places as loadImage does.
   // this means you can find files that are in the data folder and the 
   // sketch folder. you can also pass an absolute path, or a URL.
-  player = minim.loadFile("test.mp3");
+  //player = minim.loadFile("440.wav");
+   player = minim.loadFile("test.mp3");
 }
 
 void draw() {
@@ -104,16 +105,41 @@ void draw() {
 }
 
 int startTime = 0;
-int delay = 5000;
+int delay = 1000;
 void playSound() {
-  player.play();
+  
+  // Check to see if we've hit the end of the song. If yes, repeat it.
+  if ( player.position() == player.length() ) {
+    player.rewind();
+  }
+  
+  // Check to see whether the player is going
+  //boolean wasPlaying = player.isPlaying();
+  
+  if (!player.isPlaying()) {
+    player.play();
+    player.shiftGain(-80, 13, 1000);
+  }
+  //player.play();
+  
+  // Reset the timestamp
   startTime = millis();
 }
 
-
+boolean isFading = false;
+int stopDelay = 2000;
 void stopSound() {
   int now = millis();
-  if (now - startTime > delay) {
+  if ((now - startTime > delay) && player.isPlaying() && !isFading) {
+    player.shiftGain(13,-80, stopDelay);
+    isFading = true;
+  }
+  if (now - startTime > delay + stopDelay) {
+    isFading = false;
     player.pause();
   }
+}
+
+void fade() {
+  
 }
