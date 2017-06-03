@@ -1,0 +1,10 @@
+PIR source:
+http://leeselectronic.com/en/product/108472.html
+
+PIR Datasheet:
+https://www.mpja.com/download/31227sc.pdf
+
+
+Processing libraries installed:
+	- Sound
+	
