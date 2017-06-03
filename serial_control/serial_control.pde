@@ -83,11 +83,12 @@ void draw() {
   for (int i = 0; i <= 13; i++) {
     if (arduino.digitalRead(i) == Arduino.HIGH && i == 3) {
       fill(on);
-      isHigh = true;
+      playSound();
     }
     else {
       fill(off);
       isHigh = false;
+      stopSound();
     }
       
     rect(420 - i * 30, 30, 20, 20);
@@ -99,18 +100,20 @@ void draw() {
     ellipse(280 + i * 30, 240, arduino.analogRead(i) / 16, arduino.analogRead(i) / 16);
   }
   
-  playSound();
+
 }
 
+int startTime = 0;
+int delay = 5000;
 void playSound() {
-  println(isHigh)
-  if (isHigh == true) {
-    if (player.position() == player.length()) {
-      player.rewind();
-    }
-    player.play();
-  }
-  else {
+  player.play();
+  startTime = millis();
+}
+
+
+void stopSound() {
+  int now = millis();
+  if (now - startTime > delay) {
     player.pause();
   }
 }
