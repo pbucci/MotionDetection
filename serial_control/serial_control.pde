@@ -28,9 +28,11 @@ For more information, see: http://playground.arduino.cc/Interfacing/Processing
 */
 
 import processing.serial.*;
-
 import cc.arduino.*;
+import ddf.minim.*;
 
+Minim minim;
+AudioPlayer player;
 Arduino arduino;
 
 int dataPin = 3; // the input pin for the PIR sensor 
@@ -38,13 +40,12 @@ boolean isHigh = false;
 color off = color(4, 79, 111);
 color on = color(84, 145, 158);
 
-/// Minim
-import ddf.minim.*;
+int delay = 15000;     // 10 seconds
+int stopDelay = 1000; // 10 seconds 
 
-Minim minim;
-AudioPlayer player;
+boolean isFading = false;
 
-///
+int startTime = 0;
 
 void setup() {
   size(470, 280);
@@ -61,9 +62,7 @@ void setup() {
   // Arduino (in double-quotes), as in the following line.
   //arduino = new Arduino(this, "/dev/tty.usbmodem621", 57600);
   
-  // Set the Arduino digital pins as inputs.
-  //for (int i = 0; i <= 13; i++)
-    //arduino.pinMode(i, Arduino.INPUT);
+  // Set the Arduino digital pins as an input.
   arduino.pinMode(dataPin, Arduino.INPUT);
   
   // we pass this to Minim so that it can load files from the data directory
@@ -72,13 +71,18 @@ void setup() {
   // loadFile will look in all the same places as loadImage does.
   // this means you can find files that are in the data folder and the 
   // sketch folder. you can also pass an absolute path, or a URL.
-  //player = minim.loadFile("440.wav");
-   player = minim.loadFile("test.mp3");
+  player = minim.loadFile("440.wav");
+   //player = minim.loadFile("test.mp3");
 }
 
 void draw() {
   background(off);
   stroke(on);
+  
+  // Check to see if we've hit the end of the song. If yes, repeat it.
+  if ( player.position() == player.length() ) {
+    player.rewind();
+  }
   
   // Draw a filled box for each digital pin that's HIGH (5 volts).
   for (int i = 0; i <= 13; i++) {
@@ -100,19 +104,9 @@ void draw() {
   for (int i = 0; i <= 5; i++) {
     ellipse(280 + i * 30, 240, arduino.analogRead(i) / 16, arduino.analogRead(i) / 16);
   }
-  
-
 }
 
-int startTime = 0;
-int delay = 1000;
 void playSound() {
-  
-  // Check to see if we've hit the end of the song. If yes, repeat it.
-  if ( player.position() == player.length() ) {
-    player.rewind();
-  }
-  
   // Check to see whether the player is going
   //boolean wasPlaying = player.isPlaying();
   
@@ -126,8 +120,6 @@ void playSound() {
   startTime = millis();
 }
 
-boolean isFading = false;
-int stopDelay = 2000;
 void stopSound() {
   int now = millis();
   if ((now - startTime > delay) && player.isPlaying() && !isFading) {
@@ -138,8 +130,4 @@ void stopSound() {
     isFading = false;
     player.pause();
   }
-}
-
-void fade() {
-  
 }

@@ -5,6 +5,9 @@ PIR Datasheet:
 https://www.mpja.com/download/31227sc.pdf
 
 
+PIR Learning:
+https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor/testing-a-pir
+
 Processing libraries installed:
 	- Minim
 
