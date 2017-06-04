@@ -40,7 +40,7 @@ boolean isHigh = false;
 color off = color(4, 79, 111);
 color on = color(84, 145, 158);
 
-int delay = 15000;     // 10 seconds
+int delay = 8000;     // 10 seconds
 int stopDelay = 1000; // 10 seconds 
 
 boolean isFading = false;
@@ -56,7 +56,7 @@ void setup() {
   // Modify this line, by changing the "0" to the index of the serial
   // port corresponding to your Arduino board (as it appears in the list
   // printed by the line above).
-  arduino = new Arduino(this, Arduino.list()[1], 57600);
+  arduino = new Arduino(this, Arduino.list()[0], 57600);
   
   // Alternatively, use the name of the serial port corresponding to your
   // Arduino (in double-quotes), as in the following line.
@@ -71,8 +71,8 @@ void setup() {
   // loadFile will look in all the same places as loadImage does.
   // this means you can find files that are in the data folder and the 
   // sketch folder. you can also pass an absolute path, or a URL.
-  player = minim.loadFile("440.wav");
-   //player = minim.loadFile("test.mp3");
+  // player = minim.loadFile("440.wav");
+   player = minim.loadFile("loopmedaddy.wav");
 }
 
 void draw() {
@@ -111,7 +111,7 @@ void playSound() {
   //boolean wasPlaying = player.isPlaying();
   
   if (!player.isPlaying()) {
-    player.play();
+    player.loop();
     player.shiftGain(-80, 13, 1000);
   }
   //player.play();
