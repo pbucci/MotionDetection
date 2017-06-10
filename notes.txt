@@ -11,3 +11,9 @@ https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor/testing-
 Processing libraries installed:
 	- Minim
 
+
+Ultrasonic:
+
+http://forum.arduino.cc/index.php/topic,20920.html
+https://playground.arduino.cc/Main/MaxSonar
+http://maxbotix.com/documents/LV-MaxSonar-EZ_Datasheet.pdf
