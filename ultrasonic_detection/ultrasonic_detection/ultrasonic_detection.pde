@@ -54,7 +54,7 @@ int maxVolume = 13;       // maximum volume
 // Program state variables
 boolean isFading = false; // whether player is fading out
 int startTime = 0;        // time since start of playback
-int lastPause = 0;        // time since last pause
+int lastPause = 999999;        // time since last pause
 
 // -------------------------------------------------------------------
 // Runs once when program is started
@@ -118,7 +118,8 @@ void draw() {
   }
   
   float distance = minFilter(samples);
-  println("Distance to object is " + distance + ".");
+  // Uncomment this line to print sensor distance values
+  // println("Distance to object is " + distance + ".");
   
   // Determine what to do about sound playback
   handleSound(distance);
@@ -147,7 +148,8 @@ void handleSound(float distance) {
   
   // Reset song if nobody has triggered it recently 
   int now = millis();
-  if ( now - lastPause > stopDelay ) {
+  if ( now - lastPause > stopDelay && !player.isPlaying()) {
+    println("Now:" + now + "\nlastPause: " + lastPause);
     player.rewind();
   }
   
@@ -182,7 +184,7 @@ void fadeOut() {
     
   // If the player is playing AND not fading, start the fade
   if ((now - startTime > delay) && player.isPlaying() && !isFading) {
-    player.shiftGain(minVolume, maxVolume, fadeOutLength);
+    player.shiftGain(maxVolume, minVolume, fadeOutLength);
     isFading = true;
   }
   
