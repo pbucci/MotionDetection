@@ -46,7 +46,7 @@ int fadeOutLength = 2500; // length of time the fade out takes (ms)
 int fadeInLength = 1000;  // length of time the fade in takes (ms)
 int stopDelay = 10000;    // length of time a pause can happen before 
                           // resetting the song to beginning (ms)
-float threshold = 30.0;   // minimum distance to trigger playback (in)
+float threshold = 84.0;   // minimum distance to trigger playback (in)
 int minVolume = -80;      // minimum volume
 int maxVolume = 13;       // maximum volume
 
