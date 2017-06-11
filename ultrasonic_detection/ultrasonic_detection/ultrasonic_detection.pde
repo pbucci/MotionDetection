@@ -87,9 +87,10 @@ void setup() {
   // to the appropriate print.
   
   // player = minim.loadFile("test.mp3");
-  // player = minim.loadFile("170608_CedarSister_ExhibitionMaster1.wav");
+  player = minim.loadFile("170608_CedarSister_ExhibitionMaster1_reexport.wav");
   // player = minim.loadFile("170608_FoamWoman_ExhibitionMaster1.wav");
-  player = minim.loadFile("170608_Landslide_ExhibitionMaster1.wav");
+  // player = minim.loadFile("170610_FoamWoman_ExhibitionMaster2_SpokenIntro.wav");
+  //player = minim.loadFile("170608_Landslide_ExhibitionMaster1.wav");
   
 }
 
