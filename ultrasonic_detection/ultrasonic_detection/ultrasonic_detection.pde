@@ -40,11 +40,11 @@ AudioPlayer player;
 // -------------------------------------------------------------------
 // Options
 int dataPin = 0;          // the input pin for the ultrasonic sensor 
-int delay = 1000;         // length of time the song will play for 
+int delay = 5000;         // length of time the song will play for 
                           // after last trigger (ms)
-int fadeOutLength = 1000; // length of time the fade out takes (ms)
+int fadeOutLength = 2500; // length of time the fade out takes (ms)
 int fadeInLength = 1000;  // length of time the fade in takes (ms)
-int stopDelay = 5000;     // length of time a pause can happen before 
+int stopDelay = 10000;    // length of time a pause can happen before 
                           // resetting the song to beginning (ms)
 float threshold = 30.0;   // minimum distance to trigger playback (in)
 int minVolume = -80;      // minimum volume
@@ -54,7 +54,7 @@ int maxVolume = 13;       // maximum volume
 // Program state variables
 boolean isFading = false; // whether player is fading out
 int startTime = 0;        // time since start of playback
-int lastPause = 999999;        // time since last pause
+int lastPause = 999999;   // time since last pause
 
 // -------------------------------------------------------------------
 // Runs once when program is started
@@ -82,15 +82,23 @@ void setup() {
   // loadFile will look in all the same places as loadImage does.
   // this means you can find files that are in the data folder and the 
   // sketch folder. you can also pass an absolute path, or a URL.
-  // player = minim.loadFile("440.wav");
-  // player = minim.loadFile("loopmedaddy.wav");
-  player = minim.loadFile("test.mp3");
+  
+  // Audio files and relative paths. Uncomment the line that corresponds
+  // to the appropriate print.
+  
+  // player = minim.loadFile("test.mp3");
+  // player = minim.loadFile("170608_CedarSister_ExhibitionMaster1.wav");
+  // player = minim.loadFile("170608_FoamWoman_ExhibitionMaster1.wav");
+  player = minim.loadFile("170608_Landslide_ExhibitionMaster1.wav");
+  
 }
 
 // ------------------------------------------------------------------
 // Runs continuously in a loop while programming is running
 void draw() {
- 
+  // Uncomment this for debugging
+  // logVars();
+  
   // ---------------------------------------------------- 
   // Take filterWidth measurements of the space and       
   // execute a filter to get the best data.               
@@ -119,7 +127,7 @@ void draw() {
   
   float distance = minFilter(samples);
   // Uncomment this line to print sensor distance values
-  // println("Distance to object is " + distance + ".");
+   println("Distance to object is " + distance + ".");
   
   // Determine what to do about sound playback
   handleSound(distance);
@@ -170,10 +178,19 @@ void fadeIn() {
   if (!player.isPlaying()) {
     player.loop();
     player.shiftGain(minVolume, maxVolume, fadeInLength);
-  }
-  
-  // Reset the timestamp
-  startTime = millis();
+    isFading = false;
+    // reset the counter since the last pause
+    lastPause = millis();
+  } else if (!isFading) {
+    // Reset the timestamp
+    startTime = millis();
+  } else if (isFading) {
+    // if in the middle of a fade out, don't restart the song
+    player.shiftGain(minVolume, maxVolume, fadeInLength);
+    isFading = false;
+    // reset the counter since the last pause
+    lastPause = millis();
+  } 
 }
 
 // -------------------------------------------------------------------
@@ -186,13 +203,24 @@ void fadeOut() {
   if ((now - startTime > delay) && player.isPlaying() && !isFading) {
     player.shiftGain(maxVolume, minVolume, fadeOutLength);
     isFading = true;
+    // reset the counter since the last pause
+    lastPause = now;
   }
   
   // If the player has played for long enough 
   // AND we're not fading, pause playback
-  if (now - startTime > delay + fadeOutLength && player.isPlaying()) {
+  if (now - startTime > delay + fadeOutLength && player.isPlaying() && isFading) {
     isFading = false;
     player.pause();
+    // reset the counter since the last pause
     lastPause = now;
   }
+}
+
+// -------------------------------------------------------------------
+// Log the program state for debugging
+void logVars() {
+  println("isFading: " + isFading);   // whether player is fading out
+  println("startTime: " + startTime); // time since start of playback
+  println("lastPause: " + lastPause); // time since last pause
 }
