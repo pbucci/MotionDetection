@@ -68,11 +68,11 @@ void setup() {
   // Modify this line, by changing the "0" to the index of the serial
   // port corresponding to your Arduino board (as it appears in the list
   // printed by the line above).
-  arduino = new Arduino(this, Arduino.list()[1], 57600);
+  // arduino = new Arduino(this, Arduino.list()[1], 57600);
 
   // Alternatively, use the name of the serial port corresponding to your
   // Arduino (in double-quotes), as in the following line.
-  // arduino = new Arduino(this, "/dev/tty.usbmodem621", 57600);
+  arduino = new Arduino(this, "COM5", 57600);
 
   // Set the Arduino digital pins as an input.
   arduino.pinMode(dataPin, Arduino.INPUT);
